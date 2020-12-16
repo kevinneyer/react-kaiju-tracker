@@ -60,8 +60,14 @@ class KaijuContainer extends React.Component {
     })
   }
 
+  addSighting = (sighting) => {
+    this.setState({
+      sightings: [...this.state.sightings, sighting]
+    })
+  }
+
   render() {
-    console.log(this.state)
+  
     return (
       <>
         {this.state.create ? <button onClick={this.createHandler}>Hide Form</button> : <button onClick={this.createHandler}>Create a Kaiju</button> }
@@ -70,7 +76,7 @@ class KaijuContainer extends React.Component {
         <div id='kaiju-container'>
 
           {/* Kaiju cards should go in here! */}
-         {this.state.kaijus.map((kaiju, key) => <KaijuCard key={key} kaiju={kaiju} editKaiju={this.editKaiju} deleteKaiju={this.deleteKaiju} /> )}
+         {this.state.kaijus.map((kaiju, key) => <KaijuCard key={key} kaiju={kaiju} editKaiju={this.editKaiju} deleteKaiju={this.deleteKaiju} sightings={this.state.sightings}  addSighting={this.addSighting} /> )}
 
         </div>
 
