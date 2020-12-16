@@ -11,18 +11,36 @@ import * as requests from './requests'
 class KaijuContainer extends React.Component {
 
   state = {
-    kaijus: []
+    kaijus: [],
+    create: false
+  }
+
+  componentDidMount(){
+    requests.fetchKaijus()
+    .then(kaijus => 
+      this.setState({ kaijus }))
+  }
+
+  createHandler = () => {
+    this.setState({ create: !this.state.create})
+  }
+
+  addKaijuHandler = (kaiju) => {
+    this.setState({
+      kaijus: [...this.state.kaijus, kaiju]
+    })
   }
 
   render() {
     return (
       <>
-
-        <CreateKaijuForm />
+        {this.state.create ? <button onClick={this.createHandler}>Hide Form</button> : <button onClick={this.createHandler}>Create a Kaiju</button> }
+        {this.state.create? <CreateKaijuForm addKaijuHandler={this.addKaijuHandler}/> : null }
 
         <div id='kaiju-container'>
 
           {/* Kaiju cards should go in here! */}
+         {this.state.kaijus.map((kaiju, key) => <KaijuCard key={key} kaiju={kaiju} /> )}
 
         </div>
 
