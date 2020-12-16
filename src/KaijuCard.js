@@ -15,7 +15,7 @@ class KaijuCard extends React.Component {
   // How can we show the edit form conditionally?
   render() {
 
-    const {name, power, image} = this.props.kaiju
+    const { id, name, power, image} = this.props.kaiju
 
     return (
       <div className='kaiju-card'>
@@ -26,8 +26,8 @@ class KaijuCard extends React.Component {
         <img className='kaiju-card-image' src={image} alt={name} />
 
         {/* What should this edit button do? */}
-        <button className='kaiju-card-edit-button' onClick={this.editHandler} >Edit</button>
-        { this.state.edit ? <EditKaijuForm /> : null }
+        { this.state.edit? <button className='kaiju-card-edit-button' onClick={this.editHandler}>Hide Form</button> : <button className='kaiju-card-edit-button' onClick={this.editHandler} >Edit</button> }
+        { this.state.edit ? <EditKaijuForm kaiju={this.props.kaiju} editKaiju={this.props.editKaiju} deleteKaiju={this.props.deleteKaiju} editHandler={this.editHandler} /> : null }
       </div>
     )
   }

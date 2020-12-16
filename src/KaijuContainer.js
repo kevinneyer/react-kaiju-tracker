@@ -12,13 +12,16 @@ class KaijuContainer extends React.Component {
 
   state = {
     kaijus: [],
-    create: false
+    create: false,
+    sightings: []
   }
 
   componentDidMount(){
     requests.fetchKaijus()
     .then(kaijus => 
-      this.setState({ kaijus }))
+    this.setState({ kaijus }))
+    requests.fetchSightings()
+    .then(sightings => this.setState({ sightings }))
   }
 
   createHandler = () => {
@@ -31,7 +34,34 @@ class KaijuContainer extends React.Component {
     })
   }
 
+  editKaiju = (data) => {
+    let newKaijus = this.state.kaijus.map( kaiju => {
+      if(kaiju.id === data.id){
+       return {...kaiju, name: data.name, power: data.power, image: data.image}
+      } 
+      return kaiju
+     })
+     this.setState({ kaijus: newKaijus })
+  }
+
+  deleteKaiju = (id) => {
+    fetch(`http://localhost:4000/kaijus/${id}`, {
+      method:'DELETE',
+      headers: {
+        'Content-Type': 'applicaton/json'
+      }
+    })
+    .then(() => {
+      let newState = [...this.state.kaijus]
+      newState = newState.filter(kaij => kaij.id !== id)
+      this.setState({
+        kaijus: newState
+      })
+    })
+  }
+
   render() {
+    console.log(this.state)
     return (
       <>
         {this.state.create ? <button onClick={this.createHandler}>Hide Form</button> : <button onClick={this.createHandler}>Create a Kaiju</button> }
@@ -40,7 +70,7 @@ class KaijuContainer extends React.Component {
         <div id='kaiju-container'>
 
           {/* Kaiju cards should go in here! */}
-         {this.state.kaijus.map((kaiju, key) => <KaijuCard key={key} kaiju={kaiju} /> )}
+         {this.state.kaijus.map((kaiju, key) => <KaijuCard key={key} kaiju={kaiju} editKaiju={this.editKaiju} deleteKaiju={this.deleteKaiju} /> )}
 
         </div>
 
